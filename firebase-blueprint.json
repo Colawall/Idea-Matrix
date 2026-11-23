@@ -1,0 +1,129 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with shareable connection code",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string", "description": "Full name or handle" },
+        "email": { "type": "string", "description": "Account email" },
+        "photoUrl": { "type": "string", "description": "Avatar photo URL" },
+        "shareCode": { "type": "string", "description": "Unique shareable code in format IM-XXXXXX" },
+        "createdAt": { "type": "number", "description": "Creation timestamp in millis" },
+        "updatedAt": { "type": "number", "description": "Last update timestamp in millis" }
+      },
+      "required": ["uid", "shareCode"]
+    },
+    "Connection": {
+      "title": "Connection",
+      "description": "Connection request or link between two collaborators",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Connection document ID" },
+        "senderId": { "type": "string", "description": "UID of the user who initiated the connection" },
+        "senderName": { "type": "string", "description": "Display name of sender" },
+        "senderPhoto": { "type": "string", "description": "Photo URL of sender" },
+        "senderEmail": { "type": "string", "description": "Email of sender" },
+        "receiverId": { "type": "string", "description": "UID of the user receiving the connection request" },
+        "receiverName": { "type": "string", "description": "Display name of receiver" },
+        "receiverPhoto": { "type": "string", "description": "Photo URL of receiver" },
+        "receiverEmail": { "type": "string", "description": "Email of receiver" },
+        "receiverCode": { "type": "string", "description": "The IM-XXXXXX code targeted" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "declined"], "description": "Status of the connection" },
+        "createdAt": { "type": "number", "description": "Creation timestamp in millis" },
+        "updatedAt": { "type": "number", "description": "Update timestamp in millis" }
+      },
+      "required": ["senderId", "receiverId", "status"]
+    },
+    "Idea": {
+      "title": "Idea",
+      "description": "Collaborative startup idea document with member roles and execution state",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Idea document ID" },
+        "title": { "type": "string", "description": "Idea title/name" },
+        "description": { "type": "string", "description": "Pitch and description" },
+        "category": { "type": "string", "description": "Editable category" },
+        "neededRequirements": { "type": "string", "description": "Comma separated bottleneck requirements" },
+        "moneyScore": { "type": "number", "description": "Capital readiness score (0-100)" },
+        "skillsScore": { "type": "number", "description": "Skills readiness score (0-100)" },
+        "timeScore": { "type": "number", "description": "Time readiness score (0-100)" },
+        "toolsScore": { "type": "number", "description": "Tools readiness score (0-100)" },
+        "peopleScore": { "type": "number", "description": "People readiness score (0-100)" },
+        "knowledgeScore": { "type": "number", "description": "Knowledge readiness score (0-100)" },
+        "readinessScore": { "type": "number", "description": "Overall calculated readiness (0-100)" },
+        "executionStatus": { "type": "string", "enum": ["Not Started", "Started", "Done", "Live"], "description": "Execution status" },
+        "nextAction": { "type": "string", "description": "Next execution action item" },
+        "stepsJson": { "type": "string", "description": "Serialized execution steps" },
+        "resourcesJson": { "type": "string", "description": "Serialized resources (PDFs, docs, URLs)" },
+        "ownerId": { "type": "string", "description": "UID of the Owner" },
+        "ownerName": { "type": "string", "description": "Name of the Owner" },
+        "ownerPhoto": { "type": "string", "description": "Photo of the Owner" },
+        "executorId": { "type": "string", "description": "UID of the Executor chosen by owner" },
+        "executorName": { "type": "string", "description": "Name of the Executor" },
+        "memberIds": { "type": "array", "description": "Array of UIDs with access" },
+        "membersJson": { "type": "string", "description": "Serialized list of IdeaMember objects" },
+        "createdAt": { "type": "number", "description": "Creation timestamp in millis" },
+        "updatedAt": { "type": "number", "description": "Last update timestamp in millis" }
+      },
+      "required": ["title", "ownerId", "memberIds", "executionStatus"]
+    },
+    "IdeaActivity": {
+      "title": "IdeaActivity",
+      "description": "Activity feed item and comments for an idea",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Activity ID" },
+        "ideaId": { "type": "string", "description": "Idea ID" },
+        "userId": { "type": "string", "description": "UID of author" },
+        "userName": { "type": "string", "description": "Display name of author" },
+        "userPhoto": { "type": "string", "description": "Photo URL of author" },
+        "type": { "type": "string", "description": "Activity type: comment, status_change, etc." },
+        "message": { "type": "string", "description": "Content of comment or event summary" },
+        "timestamp": { "type": "number", "description": "Event timestamp in millis" }
+      },
+      "required": ["ideaId", "userId", "message", "timestamp"]
+    },
+    "UserNotification": {
+      "title": "UserNotification",
+      "description": "User notification for invites, requests, and updates",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Notification ID" },
+        "recipientId": { "type": "string", "description": "Target user UID" },
+        "senderId": { "type": "string", "description": "Sender UID" },
+        "senderName": { "type": "string", "description": "Sender Name" },
+        "title": { "type": "string", "description": "Notification title" },
+        "body": { "type": "string", "description": "Notification body" },
+        "type": { "type": "string", "description": "Notification type" },
+        "relatedId": { "type": "string", "description": "Associated idea or connection ID" },
+        "isRead": { "type": "boolean", "description": "Whether read by user" },
+        "timestamp": { "type": "number", "description": "Notification timestamp in millis" }
+      },
+      "required": ["recipientId", "title", "body", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profile with shareCode and account info"
+    },
+    "/connections/{connectionId}": {
+      "schema": { "$ref": "#/entities/Connection" },
+      "description": "Collaborator connection requests and friendships"
+    },
+    "/ideas/{ideaId}": {
+      "schema": { "$ref": "#/entities/Idea" },
+      "description": "Collaborative ideas with role-based permissions"
+    },
+    "/ideas/{ideaId}/activities/{activityId}": {
+      "schema": { "$ref": "#/entities/IdeaActivity" },
+      "description": "Activity log and comments for an idea"
+    },
+    "/users/{userId}/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/UserNotification" },
+      "description": "Notifications for invites, updates, and connection requests"
+    }
+  }
+}
